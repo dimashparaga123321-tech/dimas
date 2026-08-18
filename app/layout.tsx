@@ -2,18 +2,16 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Дима Шпарага — сайты и Telegram-боты",
-  description: "Сайты и Telegram-боты для бизнеса: ясно, быстро и с характером.",
+  title: "Web&Bots — сайты и Telegram-боты",
+  description: "Web&Bots создаёт сайты и Telegram-боты для бизнеса: ясно, быстро и с характером.",
   openGraph: {
-    title: "Дима Шпарага — сайты и Telegram-боты",
+    title: "Web&Bots — сайты и Telegram-боты",
     description: "Сайты и Telegram-боты для бизнеса: ясно, быстро и с характером.",
-    images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Дима Шпарага — сайты и Telegram-боты",
+    title: "Web&Bots — сайты и Telegram-боты",
     description: "Сайты и Telegram-боты для бизнеса: ясно, быстро и с характером.",
-    images: ["/og.png"],
   },
 };
 

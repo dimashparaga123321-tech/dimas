@@ -11,7 +11,7 @@ export default function Home() {
     <main>
       <section className="hero" id="top">
         <nav className="nav" aria-label="Навигация">
-          <a className="logo" href="#top" aria-label="На главную">ДШ<span>↗</span></a>
+          <a className="brand-wordmark" href="#top" aria-label="Web and Bots — на главную">Web<span>&amp;</span>Bots</a>
           <div className="nav-links">
             <a href="#services">Услуги</a>
             <a href="#process">Как работаем</a>
@@ -67,7 +67,7 @@ export default function Home() {
       </section>
 
       <footer>
-        <a className="logo" href="#top">ДШ<span>↗</span></a>
+        <a className="brand-wordmark" href="#top">Web<span>&amp;</span>Bots</a>
         <a href={telegram}>@shpdmitriy</a>
         <span>© 2026</span>
       </footer>
