@@ -20,7 +20,7 @@ export default function Home() {
         </nav>
 
         <div className="hero-grid">
-          <p className="hero-note">Дима Шпарага<br />веб‑разработчик · Москва</p>
+          <p className="hero-note">Дима Шпарага<br />веб‑разработчик · Санкт‑Петербург</p>
           <div className="hero-main">
             <p className="eyebrow">Сайты и Telegram‑боты для бизнеса</p>
             <h1>Собираю<br /><i>цифровые</i><br />истории.</h1>
@@ -57,7 +57,7 @@ export default function Home() {
       </section>
 
       <section className="proof">
-        <div className="proof-stamp" aria-hidden="true">WEB<br />×<br />BOT</div>
+        <div className="proof-stamp" aria-hidden="true">ПОГОВОРИМ<br />О<br />ДЕЛЕ</div>
         <div>
           <p className="eyebrow">Вместо сложного техзадания</p>
           <h2>Нормальный<br />разговор <i>о деле.</i></h2>
