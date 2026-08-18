@@ -25,7 +25,7 @@ h1,h2 { margin:0; letter-spacing:-.075em; }
 h1 { font:800 clamp(54px,9.4vw,142px)/.84 Manrope,sans-serif; text-transform:uppercase; }
 h1 i,h2 i { font-family:Prata,Georgia,serif; font-size:.9em; font-weight:400; letter-spacing:-.1em; text-transform:none; }
 .hero-text { max-width:380px; margin:38px 0 29px; color:var(--smoke); font-size:16px; line-height:1.55; font-weight:500; }
-.primary-button { display:inline-flex; align-items:center; gap:38px; padding:17px 20px; border:1px solid var(--bronze); color:var(--linen); background:rgba(198,153,101,.09); font:500 10px/1 'DM Mono',monospace; letter-spacing:.05em; text-transform:uppercase; transition:background .25s,color .25s,transform .25s; }
+.primary-button { display:inline-flex; align-items:center; gap:38px; padding:17px 24px; border:1px solid var(--bronze); border-radius:999px; color:var(--linen); background:rgba(198,153,101,.09); font:500 10px/1 'DM Mono',monospace; letter-spacing:.05em; text-transform:uppercase; transition:background .25s,color .25s,transform .25s; }
 .primary-button:hover { background:var(--bronze); color:var(--coal); transform:translateY(-3px); }
 .primary-button span { color:var(--bronze); font-size:19px; }.primary-button:hover span { color:var(--coal); }
 .orbit { width:124px; height:124px; border:1px solid rgba(198,153,101,.8); border-radius:50%; display:grid; place-items:center; position:relative; justify-self:end; margin-top:9vh; color:var(--linen); }
@@ -64,7 +64,7 @@ h1 i,h2 i { font-family:Prata,Georgia,serif; font-size:.9em; font-weight:400; le
 .proof h2 i { color:var(--bronze); }
 .proof-text { max-width:370px; margin:37px 0 30px; color:var(--smoke); font-size:16px; line-height:1.55; }
 .proof-stamp { width:116px; height:116px; border:1px solid var(--bronze); border-radius:50%; display:grid; place-items:center; text-align:center; align-self:end; color:var(--bronze); font:500 13px/1.2 'DM Mono',monospace; letter-spacing:.08em; transform:rotate(-12deg); }
-.outline-button { display:inline-flex; align-items:center; gap:40px; padding:16px 19px; border:1px solid rgba(240,236,228,.58); font:500 10px/1 'DM Mono',monospace; letter-spacing:.05em; text-transform:uppercase; transition:background .2s,color .2s,border-color .2s; }
+.outline-button { display:inline-flex; align-items:center; gap:40px; padding:16px 23px; border:1px solid rgba(240,236,228,.58); border-radius:999px; font:500 10px/1 'DM Mono',monospace; letter-spacing:.05em; text-transform:uppercase; transition:background .2s,color .2s,border-color .2s; }
 .outline-button:hover { background:var(--bronze); border-color:var(--bronze); color:var(--coal); }
 .outline-button span { color:var(--bronze); font-size:18px; }.outline-button:hover span { color:var(--coal); }
 footer { min-height:100px; padding:0 4.8vw; display:flex; align-items:center; justify-content:space-between; background:var(--coal); color:var(--linen); font:500 10px/1 'DM Mono',monospace; letter-spacing:.07em; text-transform:uppercase; }
