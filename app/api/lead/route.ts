@@ -108,7 +108,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "TELEGRAM_NOT_CONFIGURED",
-        error: "Приём заявок ещё настраивается. Пока напишите Диме в Telegram: @shpdmitriy",
+        error: "Приём заявок ещё настраивается. Попробуйте, пожалуйста, чуть позже.",
       },
       503
     );
@@ -127,11 +127,11 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      return json({ ok: false, error: "Заявка не дошла. Напишите Диме в Telegram: @shpdmitriy" }, 502);
+      return json({ ok: false, error: "Заявка не дошла. Попробуйте отправить ещё раз через минуту." }, 502);
     }
 
     return json({ ok: true });
   } catch {
-    return json({ ok: false, error: "Заявка не дошла. Напишите Диме в Telegram: @shpdmitriy" }, 502);
+    return json({ ok: false, error: "Заявка не дошла. Попробуйте отправить ещё раз через минуту." }, 502);
   }
 }

@@ -29,7 +29,7 @@ export default function Home() {
             <p className="eyebrow">Сайты и Telegram‑боты для бизнеса</p>
             <h1>Собираю<br /><i>цифровые</i><br />истории.</h1>
             <p className="hero-text">Чтобы вас находили, понимали и выбирали — без сложных слов и бесконечной разработки.</p>
-            <a className="primary-button" href={telegram}>Давай обсудим идею <span>↗</span></a>
+            <a className="primary-button" href={telegram} data-open-chat>Давай обсудим идею <span>↗</span></a>
           </div>
           <div className="orbit" aria-hidden="true"><span>01</span><b>◉</b><i /></div>
         </div>

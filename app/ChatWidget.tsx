@@ -41,9 +41,9 @@ const STEPS: { id: StepId; question: string }[] = [
 
 /** Когда сервер недоступен: на статичном хостинге отвечать и принимать заявки некому. */
 const OFFLINE_REPLY =
-  "Сейчас я не могу ответить. Напишите Диме напрямую в Telegram — @shpdmitriy, он ответит лично.";
+  "Сейчас я не могу ответить — связь с сервером пропала. Попробуйте чуть позже или сразу оставьте заявку: Дима свяжется с вами сам.";
 
-const OFFLINE_SEND_ERROR = "Заявка не отправилась. Напишите Диме в Telegram: @shpdmitriy";
+const OFFLINE_SEND_ERROR = "Заявка не отправилась — попробуйте ещё раз через минуту.";
 
 const ASK_GREETING =
   "Спрашивайте. Расскажу, что можно сделать для вашего бизнеса, чем сайт отличается от бота и как мы будем работать.";
@@ -120,6 +120,20 @@ export default function ChatWidget() {
 
     return () => window.clearTimeout(timer);
   }, [open]);
+
+  // Кнопка «Давай обсудим идею» на первом экране открывает чат сразу.
+  // Ссылка на Telegram в ней остаётся запасной — на случай, если скрипты не загрузились.
+  useEffect(() => {
+    const triggers = Array.from(document.querySelectorAll<HTMLElement>("[data-open-chat]"));
+    const onTriggerClick = (event: Event) => {
+      event.preventDefault();
+      markOffered();
+      setTeaser(false);
+      setOpen(true);
+    };
+    triggers.forEach((trigger) => trigger.addEventListener("click", onTriggerClick));
+    return () => triggers.forEach((trigger) => trigger.removeEventListener("click", onTriggerClick));
+  }, []);
 
   function toggleOpen() {
     markOffered(); // открыли сами — больше не навязываемся
@@ -226,7 +240,7 @@ export default function ChatWidget() {
     }
 
     if (step.id === "telegram") {
-      if (value && !isValidTelegram(value)) return setFieldError("Ник выглядит странно. Например: @shpdmitriy");
+      if (value && !isValidTelegram(value)) return setFieldError("Ник выглядит странно. Например: @username");
       const nick = value ? normalizeTelegram(value) : "";
       setBrief({ ...brief, telegram: nick });
       say("user", nick || "— пропущу");
