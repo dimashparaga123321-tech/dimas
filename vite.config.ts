@@ -14,6 +14,10 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
+  // Workers AI для чат-бота. Локально эта привязка переводит wrangler в удалённый
+  // режим и требует `wrangler login`, поэтому по умолчанию выключена: чат тогда
+  // отвечает по правилам. Включить вживую: CF_AI=1 npm run dev
+  ...(process.env.CF_AI === "1" ? { ai: { binding: "AI" } } : {}),
   d1_databases: d1
     ? [
         {

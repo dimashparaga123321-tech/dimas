@@ -1,3 +1,5 @@
+import ChatWidget from "./ChatWidget";
+
 const telegram = "https://t.me/shpdmitriy";
 
 export const dynamic = "force-static";
@@ -73,6 +75,8 @@ export default function Home() {
         <a href={telegram}>@shpdmitriy</a>
         <span>© 2026</span>
       </footer>
+
+      <ChatWidget />
     </main>
   );
 }
