@@ -160,14 +160,22 @@ const CASES = [
 async function ask(item) {
   const messages = [...(item.history ?? []), { role: "user", content: item.q }];
 
-  const response = await fetch(`${BASE_URL}/api/chat`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ messages }),
-  });
+  // Сеть до облака иногда рвётся — это не ошибка помощника, поэтому пробуем ещё раз.
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const response = await fetch(`${BASE_URL}/api/chat`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ messages }),
+      });
 
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  return response.json();
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      if (attempt >= 3) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 3000 * attempt));
+    }
+  }
 }
 
 const cases = ONLY ? CASES.filter((item) => item.group === ONLY) : CASES;

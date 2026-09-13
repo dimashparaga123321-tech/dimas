@@ -1,4 +1,9 @@
-name: Publish website
+name: Redirect old GitHub Pages link
+
+# Сайт переехал на Cloudflare: там работают ИИ-чат и заявки, а на GitHub Pages — нет.
+# Старую ссылку dimashparaga123321-tech.github.io/dimas/ люди уже получили,
+# поэтому здесь публикуется только страница, которая перекидывает на новый адрес.
+# Сам сайт выкладывается на Cloudflare командой deploy.cmd.
 
 on:
   push:
@@ -19,15 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run build:pages
+      - run: node scripts/github-pages-redirect.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/client
+          path: pages-redirect
 
   deploy:
     needs: build

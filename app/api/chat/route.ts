@@ -198,8 +198,9 @@ async function runModel(
 
       const reply = cleanReply(typeof result?.response === "string" ? result.response : "");
       if (reply) return { reply, model };
-    } catch {
-      // Модель недоступна или кончился лимит — пробуем следующую.
+    } catch (error) {
+      // Модель недоступна или кончился лимит — пробуем следующую. Причину видно в логах Cloudflare.
+      console.error(`Workers AI ${model} failed:`, error instanceof Error ? error.message : error);
     }
   }
 

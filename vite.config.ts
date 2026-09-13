@@ -11,13 +11,17 @@ const { d1, r2 } = hostingConfig;
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
-const localBindingConfig = {
+/**
+ * Workers AI для чат-бота. При сборке для Cloudflare привязка нужна всегда.
+ * В режиме разработки она переводит wrangler в удалённый режим и требует
+ * `wrangler login`, поэтому там включается только явно: CF_AI=1.
+ */
+const bindingConfig = (withAi: boolean) => ({
+  // Имя воркера — из него получается адрес webbots.<поддомен>.workers.dev.
+  name: "webbots",
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
-  // Workers AI для чат-бота. Локально эта привязка переводит wrangler в удалённый
-  // режим и требует `wrangler login`, поэтому по умолчанию выключена: чат тогда
-  // отвечает по правилам. Включить вживую: CF_AI=1 npm run dev
-  ...(process.env.CF_AI === "1" ? { ai: { binding: "AI" } } : {}),
+  ...(withAi ? { ai: { binding: "AI" } } : {}),
   d1_databases: d1
     ? [
         {
@@ -35,9 +39,9 @@ const localBindingConfig = {
         },
       ]
     : [],
-};
+});
 
-export default defineConfig(async () => {
+export default defineConfig(async ({ command }) => {
   // Keep Wrangler and Miniflare state project-local. These are non-secret tool
   // settings; application environment belongs in ignored `.env*` files.
   process.env.WRANGLER_WRITE_LOGS ??= "false";
@@ -60,7 +64,7 @@ export default defineConfig(async () => {
       sites(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-        config: localBindingConfig,
+        config: bindingConfig(command === "build" || process.env.CF_AI === "1"),
       }),
     ],
   };
