@@ -157,7 +157,9 @@ footer a:not(.logo) { color:var(--bronze); }
 
 @media (max-width:520px) {
   .widget-fab { right:16px; bottom:16px; width:56px; height:56px; }
-  .widget-panel { right:8px; left:8px; bottom:84px; width:auto; height:calc(100svh - 100px); border-radius:20px; }
+  /* Телефон: панель по размеру переписки, не на весь экран — без пустоты между ответами и строкой ввода */
+  .widget-panel { right:12px; left:auto; bottom:84px; width:min(340px,calc(100vw - 24px)); height:auto; max-height:min(540px,calc(100svh - 110px)); border-radius:20px; }
+  .widget-feed { flex:0 1 auto; min-height:0; }
 }
 @media (prefers-reduced-motion:reduce) { .widget-panel,.widget-fab,.widget-fab svg,.widget-bubble { transition:none; animation:none; } }
 
