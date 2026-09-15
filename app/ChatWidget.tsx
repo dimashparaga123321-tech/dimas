@@ -16,12 +16,15 @@ import {
   type ModuleId,
   type SiteType,
 } from "./brief";
+import { BOT_URL, isLinkTrouble, requestNewLink, saveLead } from "./botLink";
 
 type Mode = "start" | "brief" | "ask";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+  /** Кнопка-ссылка на чат с Димой в Telegram под сообщением. */
+  link?: string;
 }
 
 /** Шаги заявки. Каждый — один вопрос и один вид ответа. */
@@ -82,6 +85,7 @@ export default function ChatWidget() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [sendError, setSendError] = useState("");
+  const [chatLink, setChatLink] = useState("");
   const [teaser, setTeaser] = useState(false);
 
   const feedRef = useRef<HTMLDivElement>(null);
@@ -147,8 +151,8 @@ export default function ChatWidget() {
     setOpen(true);
   }
 
-  function say(role: Message["role"], content: string) {
-    setMessages((current) => [...current, { role, content }]);
+  function say(role: Message["role"], content: string, link?: string) {
+    setMessages((current) => [...current, { role, content, link }]);
   }
 
   function startBrief() {
@@ -160,6 +164,17 @@ export default function ChatWidget() {
   function startAsk() {
     setMode("ask");
     setMessages([{ role: "assistant", content: ASK_GREETING }]);
+  }
+
+  /** После заявки: переходим к помощнику, который выдаёт новую ссылку на Telegram. */
+  function openLinkHelp() {
+    setMode("ask");
+    setMessages([
+      {
+        role: "assistant",
+        content: "Если ссылка на Telegram не открылась или потерялась — напишите «ссылка не работает», и я пришлю новую. Можно и просто задать вопрос.",
+      },
+    ]);
   }
 
   function backToStart() {
@@ -295,6 +310,26 @@ export default function ChatWidget() {
     setInput("");
     setThinking(true);
 
+    // «Ссылка не работает» решаем сами, без модели: выдаём новую ссылку на бота.
+    if (isLinkTrouble(content)) {
+      const result = await requestNewLink();
+      if (result.ok) {
+        setChatLink(result.link);
+        say("assistant", "Вот новая ссылка на чат с Димой в Telegram. Старая больше не работает, а эта сработает один раз.", result.link);
+        setThinking(false);
+        return;
+      }
+      if (result.reason !== "offline") {
+        say(
+          "assistant",
+          "Не нашёл вашей заявки в этом браузере — возможно, её отправляли с другого устройства. Оставьте заявку ещё раз: ссылка на чат с Димой появится сразу после отправки."
+        );
+        setThinking(false);
+        return;
+      }
+      // Бот недоступен — пусть ответит обычный помощник.
+    }
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -317,15 +352,23 @@ export default function ChatWidget() {
     setSendError("");
 
     try {
-      const response = await fetch("/api/lead", {
+      // Заявку принимает Telegram-бот: он передаёт её Диме и выдаёт одноразовую ссылку на чат.
+      const response = await fetch(`${BOT_URL}/lead`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ brief }),
       });
-      // На статичном хостинге вместо ответа приходит страница 404 — тогда JSON не разберётся.
-      const data = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+      const data = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        error?: string;
+        leadId?: string;
+        secret?: string;
+        link?: string;
+      } | null;
       if (!data) throw new Error(OFFLINE_SEND_ERROR);
       if (!data.ok) throw new Error(data.error || OFFLINE_SEND_ERROR);
+      if (data.leadId && data.secret) saveLead({ leadId: data.leadId, secret: data.secret });
+      setChatLink(data.link ?? "");
       setSent(true);
     } catch (caught) {
       setSendError(caught instanceof Error ? caught.message : OFFLINE_SEND_ERROR);
@@ -415,6 +458,11 @@ export default function ChatWidget() {
               {message.content.split("\n").map((line, lineIndex) =>
                 line ? <p key={lineIndex}>{line}</p> : <br key={lineIndex} />
               )}
+              {message.link && (
+                <a className="widget-send widget-tg-link" href={message.link} target="_blank" rel="noopener noreferrer">
+                  Открыть чат в Telegram
+                </a>
+              )}
             </div>
           ))}
 
@@ -480,10 +528,23 @@ export default function ChatWidget() {
             </div>
           )}
 
-          {sent && (
+          {sent && mode === "brief" && (
             <div className="widget-sent">
-              <b>Заявка отправлена</b>
-              <p>Дима свяжется с вами по телефону {brief.phone} и назовёт стоимость.</p>
+              <b>Заявка у Димы</b>
+              {chatLink ? (
+                <>
+                  <p>Откройте чат с Димой в Telegram — там он вам и ответит. Саму заявку вы там не увидите, она ушла только ему.</p>
+                  <a className="widget-send widget-tg-link" href={chatLink} target="_blank" rel="noopener noreferrer">
+                    Открыть чат в Telegram
+                  </a>
+                  <p>Ссылка срабатывает один раз.</p>
+                  <button type="button" className="widget-skip" onClick={openLinkHelp}>
+                    Ссылка не открылась или потерялась?
+                  </button>
+                </>
+              ) : (
+                <p>Дима свяжется с вами по телефону {brief.phone} и назовёт стоимость.</p>
+              )}
             </div>
           )}
         </div>

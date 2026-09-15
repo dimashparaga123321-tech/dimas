@@ -143,6 +143,9 @@ footer a:not(.logo) { color:var(--bronze); }
 .widget-sent { margin-top:4px; padding:18px; border-radius:16px; background:rgba(198,153,101,.14); }
 .widget-sent b { display:block; font-size:15px; }
 .widget-sent p { margin:6px 0 0; color:var(--smoke); font-size:13px; line-height:1.5; }
+.widget-tg-link { display:block; margin-top:12px; text-align:center; text-decoration:none; }
+.widget-bubble .widget-tg-link { margin-top:10px; }
+.widget-sent .widget-skip { margin-top:10px; text-decoration:underline; }
 
 .widget-input { padding:12px 14px 14px; border-top:1px solid rgba(240,236,228,.08); }
 .widget-input-row { display:flex; gap:8px; }

@@ -1,3 +1,37 @@
+# Web&Bots — сайт
+
+Живой сайт: **https://webbots.dimashparaga123321.workers.dev** (Cloudflare Workers).
+Здесь код сайта. Telegram-бот для заявок лежит в отдельном репозитории `webbots-bot`.
+
+## Работа на Макбуке
+
+1. Поставить Node.js 22 или новее: https://nodejs.org (кнопка LTS).
+2. Скачать код и зайти в папку:
+   ```bash
+   git clone https://github.com/dimashparaga123321-tech/dimas.git webbots
+   cd webbots
+   npm install
+   ```
+3. Запустить сайт у себя: `npm run dev` → открыть http://127.0.0.1:3000
+   - С живым ИИ-чатом: один раз `npx wrangler login`, потом `CF_AI=1 npm run dev`.
+4. Выложить на Cloudflare: `npx wrangler login` (один раз), потом `npm run deploy`.
+5. Сохранить правки на GitHub: `git add -A && git commit -m "что поменял" && git push`.
+
+Перед работой на другом компьютере — `git pull`, чтобы забрать свежие правки.
+
+⚠️ Push на GitHub **не обновляет** живой сайт — только `npm run deploy`.
+Файлы `.cmd` в соседней папке — только для Windows, на Маке они не нужны.
+
+## Главные файлы
+
+- `app/page.tsx` — страница, `app/globals.css` — стили
+- `app/ChatWidget.tsx` — чат в углу (заявка и вопросы ИИ)
+- `app/knowledge.ts` — что знает ИИ-помощник
+- `app/api/chat/route.ts` — ИИ, `app/botLink.ts` — связь с Telegram-ботом
+- `scripts/ai-eval.mjs` — прогон ИИ по каверзным вопросам (сайт должен быть запущен)
+
+---
+
 # vinext-starter
 
 A clean full-stack starter running on
